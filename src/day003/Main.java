@@ -1,39 +1,34 @@
 package day003;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.Scanner;
 
 public class Main {
-    static void main() {
+
+    record Task(int number, int remain) {}
+
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Scanner sc2 = new Scanner(System.in);
 
         int n = sc.nextInt();
-        int[] processCount = Arrays.stream(sc2.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Deque<Task> queue = new ArrayDeque<>();
+        StringBuilder result = new StringBuilder();
 
-        Deque<Integer> nQueue = new ArrayDeque<>();
-        Deque<Integer> processQueue = new ArrayDeque<>();
-        Deque<Integer> resultQueue = new ArrayDeque<>();
-        for (int i=0; i<n; i++) {
-            nQueue.offer(i+1);
-            processQueue.offer(processCount[i]);
+        for (int i = 1; i <= n; i++) {
+            queue.offer(new Task(i, sc.nextInt()));
         }
 
-        while (!processQueue.isEmpty()) {
-            int process = processQueue.poll() - 1;
-            if (process == 0) {
-                resultQueue.offer(nQueue.poll());
+        while (!queue.isEmpty()) {
+            Task task = queue.poll();
+
+            if (task.remain() == 1) {
+                result.append(task.number()).append(' ');
             } else {
-                processQueue.offer(process);
-                nQueue.offer(nQueue.poll());
+                queue.offer(new Task(task.number(), task.remain() - 1));
             }
         }
 
-        while (!resultQueue.isEmpty()) {
-            System.out.print(resultQueue.poll());
-            System.out.print(' ');
-        }
+        System.out.println(result.toString().trim());
     }
 }
