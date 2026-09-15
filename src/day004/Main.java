@@ -1,50 +1,40 @@
 package day004;
-import java.util.*;
+
+import java.util.Scanner;
 
 public class Main {
-    void main(String[] args) {
 
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
         int n = sc.nextInt();
         int m = sc.nextInt();
 
         int[] abilities = new int[n];
 
-        for (int i=0; i<abilities.length; i++) {
+        for (int i = 0; i < n; i++) {
             abilities[i] = sc.nextInt();
         }
 
-        int topAbility = 0;
-        for (int i=0; i<n; i++) {
-            int nowAbility = 0;
-            nowAbility += abilities[i];
+        int maxAbility = -1;
 
-            for (int j=i+1; j<n; j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
 
-                nowAbility += abilities[j];
+                    int sum = abilities[i]
+                            + abilities[j]
+                            + abilities[k];
 
-                for (int k=j+1; k<n; k++) {
-                    int compareAbility = nowAbility;
-                    compareAbility += abilities[k];
-                    if (checkExceedAbility(m, compareAbility)) {
+                    if (sum > m) {
                         continue;
                     }
 
-                    if (topAbility < compareAbility) {
-                        topAbility = compareAbility;
-                    }
+                    maxAbility = Math.max(maxAbility, sum);
                 }
             }
         }
 
-        if (topAbility == 0) {
-            System.out.println(-1);
-        } else {
-            System.out.println(topAbility);
-        }
-    }
-
-    private boolean checkExceedAbility(int max, int value) {
-        return max < value;
+        System.out.println(maxAbility);
     }
 }
